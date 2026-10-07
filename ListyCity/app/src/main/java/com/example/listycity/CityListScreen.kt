@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,7 +33,8 @@ fun CityListScreen(
     cities: List<City>,
     onAddCity: (City) -> Unit,
     onUpdateCity: (City, City) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDeleteCity: (City) -> Unit
 ) {
     var newCityName by remember { mutableStateOf("") }
     var newProvinceName by remember { mutableStateOf("") }
@@ -128,6 +130,7 @@ fun CityListScreen(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
+                //Edit city button
                 Button(
                     modifier = Modifier.padding(vertical = 12.dp),
                     onClick = {
@@ -154,6 +157,8 @@ fun CityListScreen(
                     Text("UPDATE CITY")
                 }
             }
+
+
         }
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             itemsIndexed(cities) { index, city ->
@@ -168,6 +173,16 @@ fun CityListScreen(
                         editedProvinceName = city.province
                     }
                 )
+
+                //delete button
+                Button(modifier = Modifier.padding(vertical = 1.dp),
+                    onClick = {
+                        onDeleteCity(city)
+                    }
+                ) {
+                    Text("Delete City")
+                }
+
                 if (index < cities.lastIndex) {
                     HorizontalDivider()
                 }
@@ -213,7 +228,10 @@ fun CityListScreenPreview() {
                 City("Calgary", "AB")
             ),
             onAddCity = {},
-            onUpdateCity = { _, _ -> }
+            onUpdateCity = { oldCity, updatedCity -> updatedCity },
+            onDeleteCity = {}
+
         )
+
     }
 }
